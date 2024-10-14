@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(500, 245)
+        MainWindow.resize(500, 270)
         MainWindow.setSizeIncrement(QtCore.QSize(0, 0))
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -69,6 +69,8 @@ class Ui_MainWindow(object):
         self.actionDelete.setObjectName("actionDelete")
         self.actionSelect_All = QtGui.QAction(parent=MainWindow)
         self.actionSelect_All.setObjectName("actionSelect_All")
+        self.actionHelp = QtGui.QAction(parent=MainWindow)
+        self.actionHelp.setObjectName("actionHelp")
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
@@ -84,6 +86,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionPaste)
         self.menuEdit.addAction(self.actionDelete)
         self.menuEdit.addAction(self.actionSelect_All)
+        self.menuHelp.addAction(self.actionHelp)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -129,3 +132,5 @@ class Ui_MainWindow(object):
         self.actionDelete.setShortcut(_translate("MainWindow", "Del"))
         self.actionSelect_All.setText(_translate("MainWindow", "Select All"))
         self.actionSelect_All.setShortcut(_translate("MainWindow", "Ctrl+A"))
+        self.actionHelp.setText(_translate("MainWindow", "Help"))
+        self.actionHelp.setShortcut(_translate("MainWindow", "F1"))

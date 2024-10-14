@@ -2,8 +2,15 @@ from PyQt6 import QtWidgets, QtGui, QtCore
 import sys
 from pathlib import Path
 import gui
+import help
 
-class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
+class HelpWindow(QtWidgets.QWidget, help.Ui_Form):
+    def __init__(self):
+        super().__init__()
+        self.ui = help.Ui_Form()
+        self.ui.setupUi(self)
+
+class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -15,6 +22,7 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         self.filename_filters = "All Files (*);;Text files (*.txt)"
 
         self.filepath = ("","")
+        self.help_window = None
 
         QtWidgets.QMainWindow.closeEvent = self.exit_window
         QtWidgets.QMainWindow.resizeEvent = self.resize_event
@@ -23,43 +31,47 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         self.actionNew.triggered.connect(self.actOpen)
         self.actionNew.setStatusTip("Create new File")
-        self.actionNew.setIcon(QtGui.QIcon("icons/add-file.svg")) # 
+        self.actionNew.setIcon(QtGui.QIcon("icons/add-file.svg"))
 
         self.actionOpen.triggered.connect(self.actOpen)
         self.actionOpen.setStatusTip("Open new File")
-        self.actionOpen.setIcon(QtGui.QIcon("icons/folder-open.svg")) #
+        self.actionOpen.setIcon(QtGui.QIcon("icons/folder-open.svg"))
 
         self.actionSave.triggered.connect(self.actSave)
         self.actionSave.setStatusTip("Save the File")
-        self.actionSave.setIcon(QtGui.QIcon("icons/save.svg")) #
+        self.actionSave.setIcon(QtGui.QIcon("icons/save.svg"))
 
         self.actionSave_As.triggered.connect(self.actSaveAs)
         self.actionSave_As.setStatusTip("Save the File As...")
 
         self.actionExit.triggered.connect(self.exit_window)
         self.actionExit.setStatusTip("Close the app")
-        self.actionExit.setIcon(QtGui.QIcon("icons/windows-close.svg")) #
+        self.actionExit.setIcon(QtGui.QIcon("icons/windows-close.svg"))
         self.actionExit.setShortcut("Alt+F4")
 
         self.actionUndo.triggered.connect(self.textEdit.undo)
         self.actionUndo.setStatusTip("Undo")
-        self.actionUndo.setIcon(QtGui.QIcon("icons/undo.svg")) #
+        self.actionUndo.setIcon(QtGui.QIcon("icons/undo.svg"))
         
         self.actionRedo.triggered.connect(self.textEdit.redo)
         self.actionRedo.setStatusTip("Redo")
-        self.actionRedo.setIcon(QtGui.QIcon("icons/redo.svg")) #
+        self.actionRedo.setIcon(QtGui.QIcon("icons/redo.svg"))
 
         self.actionCut.triggered.connect(self.textEdit.cut)
         self.actionCut.setStatusTip("Cut")
-        self.actionCut.setIcon(QtGui.QIcon("icons/cut.svg")) #
+        self.actionCut.setIcon(QtGui.QIcon("icons/cut.svg"))
 
         self.actionCopy.triggered.connect(self.textEdit.copy)
         self.actionCopy.setStatusTip("Copy")
-        self.actionCopy.setIcon(QtGui.QIcon("icons/copy.svg")) #
+        self.actionCopy.setIcon(QtGui.QIcon("icons/copy.svg"))
 
         self.actionPaste.triggered.connect(self.textEdit.paste)
         self.actionPaste.setStatusTip("Paste")
-        self.actionPaste.setIcon(QtGui.QIcon("icons/paste.svg")) #
+        self.actionPaste.setIcon(QtGui.QIcon("icons/paste.svg"))
+
+        self.actionHelp.triggered.connect(self.actHelp)
+        self.actionHelp.setStatusTip("Help")
+        self.actionHelp.setIcon(QtGui.QIcon("icons/help.svg"))
 
     def update_main_name(self, name:str = "Untilited", edited:bool = False) -> None:
         self.setWindowTitle(f"{name}{"*" * edited} - Notepad")
@@ -72,7 +84,7 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
             pass
 
     def resize_event(self, event:QtGui.QResizeEvent):
-        self.textEdit.setGeometry(QtCore.QRect(0,0,event.size().width(),event.size().height() - 45))
+        self.textEdit.setGeometry(QtCore.QRect(0,0,event.size().width(),event.size().height() - 70))
 
     def exit_window(self, event:QtGui.QCloseEvent):
         close = QtWidgets.QMessageBox.question(self,
@@ -118,10 +130,14 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def actSaveAs(self):
         pass
 
+    def actHelp(self):
+        if self.help_window is None:
+            self.help_window = HelpWindow()
+        self.help_window.show()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    window = ExampleApp()
+    window = App()
 
     window.show()
     app.exec()
