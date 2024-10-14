@@ -73,13 +73,6 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         self.actionHelp.setStatusTip("Help")
         self.actionHelp.setIcon(QtGui.QIcon("icons/help.svg"))
 
-        # Style
-
-        #self.toolBar.setStyleSheet("background-color: rgb(220,220,220)")
-        self.setStyleSheet("background-color: rgb(230,230,230)")
-        self.statusbar.setStyleSheet("background-color: rgb(220,220,220)")
-        self.textEdit.setStyleSheet("border: 0px solid black")
-
     def update_main_name(self, name:str = "Untilited", edited:bool = False) -> None:
         self.setWindowTitle(f"{name}{"*" * edited} - Notepad")
 

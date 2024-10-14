@@ -1,20 +1,45 @@
 QMenu::item {
     padding: 1px 25px 1px 25px;
+    background-color: rgb(220,220,220);
+}
+
+QMenu {
+    background-color: rgb(220,220,220);
 }
 
 QMenu::item:selected {
     background: rgba(100, 100, 100, 150);
 }
 
+QMenuBar {
+    background-color: rgb(230,230,230);
+}
+
 QMenuBar::item {
     padding: 3px 6px;
+    color: black;
 }
 
 QMenuBar::item:selected { /* when selected using mouse or keyboard */
     background: #a8a8a8;
 }
 
+QToolBar::item {
+	color:red;
+}
 
 QToolBar:selected {
 	background:red;
+}
+
+QStatusBar {
+    background-color: rgb(220,220,220);
+}
+
+QTextEdit {
+    border: 0px solid black;
+}
+
+QMainWindow {
+    background-color: rgb(230,230,230);
 }
