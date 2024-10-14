@@ -1,0 +1,20 @@
+QMenu::item {
+    padding: 1px 25px 1px 25px;
+}
+
+QMenu::item:selected {
+    background: rgba(100, 100, 100, 150);
+}
+
+QMenuBar::item {
+    padding: 3px 6px;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #a8a8a8;
+}
+
+
+QToolBar:selected {
+	background:red;
+}
