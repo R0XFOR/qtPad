@@ -176,8 +176,8 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 def main():
     app = QtWidgets.QApplication(sys.argv)
     #app.setStyleSheet(Path("style.qss").read_text())
-    app.setStyleSheet(Path("dark_style.qss").read_text())
-    #app.setStyleSheet(Path("blue_style.qss").read_text())
+    #app.setStyleSheet(Path("dark_style.qss").read_text())
+    app.setStyleSheet(Path("blue_style.qss").read_text())
     window = App()
 
     window.show()
