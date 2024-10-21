@@ -19,6 +19,8 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         self.textEdit.textChanged.connect(self.txtChg)
         self.home_dir = str(Path.home())
 
+        self.edited = False
+
         self.filename_filters = "All Files (*);;Text files (*.txt)"
 
         self.filepath = ("","")
@@ -29,7 +31,7 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
         self.toolBar.setIconSize(QtCore.QSize(12,12))
 
-        self.actionNew.triggered.connect(self.actOpen)
+        self.actionNew.triggered.connect(self.actNew)
         self.actionNew.setStatusTip("Create new File")
         self.actionNew.setIcon(QtGui.QIcon("icons/add-file.svg"))
 
@@ -75,33 +77,60 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def update_main_name(self, name:str = "Untilited", edited:bool = False) -> None:
         self.setWindowTitle(f"{name}{"*" * edited} - Notepad")
+        self.edited = edited
 
     def txtChg(self):
         try:
             file = open(self.filepath[0],"rb")
             self.update_main_name(file.name.split("/")[-1],file.read() != self.textEdit.toPlainText().encode("utf-8"))
+            #self.edited = (file.read() != self.textEdit.toPlainText().encode("utf-8"))
         except:
-            pass
+            self.update_main_name(edited = "" != self.textEdit.toPlainText().encode("utf-8"))
+            #self.edited = ("" != self.textEdit.toPlainText().encode("utf-8"))
 
     def resize_event(self, event:QtGui.QResizeEvent):
-        self.textEdit.setGeometry(QtCore.QRect(0,0,event.size().width(),event.size().height() - 70))
+        self.textEdit.setGeometry(QtCore.QRect(-1,-1,event.size().width() + 2,event.size().height() - 60 + 2))
 
     def exit_window(self, event:QtGui.QCloseEvent):
-        close = QtWidgets.QMessageBox.question(self,
-                                                    "QUIT?",
-                                                    "Are you sure want to STOP and EXIT?",
-                                                    QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No)
-        if close == QtWidgets.QMessageBox.StandardButton.Yes:
+        if self.edited == True:
+            try:
+                filename = open(self.filepath[0],"rb").name.split("/")[-1]
+            except:
+                filename = "Untilited"
+            close = QtWidgets.QMessageBox.question(self,
+                                                        "QUIT?",
+                                                        f"Do you want to save the changes to a file\n{filename}?",
+                                                        QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No|QtWidgets.QMessageBox.StandardButton.Cancel)
+            if close == QtWidgets.QMessageBox.StandardButton.Yes:
+                try:
+                    self.actSave()
+                    event.accept()
+                    sys.exit()
+                except AttributeError:
+                    sys.exit()
+            elif close == QtWidgets.QMessageBox.StandardButton.Cancel:
+                try:
+                    event.ignore()
+                except AttributeError:
+                    pass
+            elif close == QtWidgets.QMessageBox.StandardButton.No:
+                try:
+                    event.accept()
+                    sys.exit()
+                except AttributeError:
+                    sys.exit()
+        else:
             try:
                 event.accept()
                 sys.exit()
             except AttributeError:
                 sys.exit()
-        else:
-            try:
-                event.ignore()
-            except AttributeError:
-                pass
+
+    def actNew(self):
+        self.filepath = ""
+
+        self.textEdit.setPlainText("")
+        self.update_main_name()
 
     def actOpen(self):
         self.filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', self.home_dir, self.filename_filters)
@@ -111,24 +140,33 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
             self.textEdit.setPlainText(file.read().decode("utf-8"))
             self.update_main_name(file.name.split("/")[-1])
             file.close()
+            self.txtChg()
         except:
             pass
 
     def actSave(self):
-        if self.filepath[0] != "":
-            file = open(self.filepath[0],"wb")
-            file.write(self.textEdit.toPlainText().encode("utf-8"))
-            file.close()
-        elif self.filepath[0] == "":
-            self.filepath = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file', self.home_dir, self.filename_filters)
-            file = open(self.filepath[0],"wb")
-            file.write(self.textEdit.toPlainText().encode("utf-8"))
-            self.update_main_name(file.name.split("/")[-1])
-            file.close()
-        self.txtChg()
+        try:
+            if self.filepath[0] != "":
+                file = open(self.filepath[0],"wb")
+                file.write(self.textEdit.toPlainText().encode("utf-8"))
+                file.close()
+            elif self.filepath[0] == "":
+                self.filepath = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file', self.home_dir, self.filename_filters)
+                file = open(self.filepath[0],"wb")
+                file.write(self.textEdit.toPlainText().encode("utf-8"))
+                self.update_main_name(file.name.split("/")[-1])
+                file.close()
+            self.txtChg()
+        except:
+            self.actSaveAs()
 
     def actSaveAs(self):
-        pass
+        self.filepath = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file', self.home_dir, self.filename_filters)
+        file = open(self.filepath[0],"wb")
+        file.write(self.textEdit.toPlainText().encode("utf-8"))
+        self.update_main_name(file.name.split("/")[-1])
+        file.close()
+        self.txtChg()
 
     def actHelp(self):
         if self.help_window is None:
@@ -137,7 +175,9 @@ class App(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyleSheet(Path("style.qss").read_text())
+    #app.setStyleSheet(Path("style.qss").read_text())
+    app.setStyleSheet(Path("dark_style.qss").read_text())
+    #app.setStyleSheet(Path("blue_style.qss").read_text())
     window = App()
 
     window.show()

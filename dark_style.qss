@@ -1,0 +1,61 @@
+QTextEdit {
+    background-color: rgb(120,120,120);
+    color: rgb(240,240,240);
+}
+
+QTextEdit::placeholder {
+  color: #767e89;
+}
+
+QTextEdit:focus {
+  border: 1px solid #d0e3ff;
+}
+
+
+QMenuBar {
+    background-color: rgb(80,80,80);
+}
+
+QMenuBar::item {
+    color: rgb(240, 240, 240);
+}
+
+QMenuBar::item:selected {
+    background-color: rgba(140, 140, 140, 150);
+}
+
+
+
+QMenu {
+    background-color: rgb(80,80,80);
+}
+
+QMenu::item {
+    color: rgb(240, 240, 240);
+}
+
+QMenu::item:selected {
+    background-color: rgba(140, 140, 140, 150);
+}
+
+
+
+QToolBar {
+    border: 1px transparent #393838;
+    background: 1px solid #302F2F;
+    font-weight: bold;
+}
+
+
+
+QStatusBar {
+    background-color: rgb(80,80,80);
+    color: rgb(240, 240, 240);
+    border-top: 1px solid #B0BEC5;
+}
+
+
+
+QMainWindow {
+    background-color: rgb(80,80,80);
+}
